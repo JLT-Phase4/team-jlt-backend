@@ -37,6 +37,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'registration',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,12 +48,17 @@ INSTALLED_APPS = [
     # Third-party
     'debug_toolbar',
     'django_extensions',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
+    
 
     # Project-specific
     'core',
 ]
 
 MIDDLEWARE = [
+    
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -138,3 +144,20 @@ INTERNAL_IPS = [
     '127.0.0.1',
     # ...
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+        
+    ],
+     'DEFAULT_PERMISSION_CLASSES':[
+            'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+
+
+ACCOUNT_ACTIVATION_DAYS = 7 # you can choose this
+REGISTRATION_AUTO_LOGIN = True # logs in user when they register
+LOGIN_REDIRECT_URL = '/' # where user is sent after login
