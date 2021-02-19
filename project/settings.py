@@ -161,3 +161,8 @@ REST_FRAMEWORK = {
 ACCOUNT_ACTIVATION_DAYS = 7 # you can choose this
 REGISTRATION_AUTO_LOGIN = True # logs in user when they register
 LOGIN_REDIRECT_URL = '/' # where user is sent after login
+
+# Configure Django App for Heroku.
+import django_on_heroku
+django_on_heroku.settings(locals())
+del DATABASES['default']['OPTIONS']['sslmode']
