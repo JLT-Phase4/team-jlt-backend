@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Team
+from .models import User, Team, Chore
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -38,5 +38,19 @@ class TeamCreateSerializer(serializers.ModelSerializer):
             'theme_song',
             'background_image',
             'dashboard_style'
+
+        ]
+
+
+class UserChoreSerializer(serializers.ModelSerializer):
+    user = serializers.SlugRelatedField(read_only=True, slug_field='username')
+    class Meta:
+        model = Chore
+        fields = [
+            'pk',
+            'user',
+            'name',
+            'detail',
+            'chore_type',
 
         ]
