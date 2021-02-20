@@ -25,7 +25,9 @@ urlpatterns = [
     path('api/auth/', include('djoser.urls')),
     path('api/auth/', include('djoser.urls.authtoken')),
     path('api/teams/', api_views.TeamList.as_view()),
-    path('api/team-detail/<int:pk>/', api_views.TeamDetailView.as_view())
+    path('api/team-detail/<int:pk>/', api_views.TeamDetailView.as_view()),
+    path('api/user-chore/<int:pk>/', api_views.UserChoreDetailView.as_view()),
+    path('api/users/<username>/chores/', api_views.UserChoreView.as_view())
 ]
 
 if settings.DEBUG:

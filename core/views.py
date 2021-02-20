@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework.views import APIView
 from rest_framework import permissions
 from .serializers import UserSerializer
 from rest_framework.response import Response
 from core.models import Team, User, Pod, Chore, Record
-from .serializers import TeamSerializer, TeamCreateSerializer
+from .serializers import TeamSerializer, TeamCreateSerializer, UserChoreSerializer
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView
 
 # Create your views here.
@@ -32,8 +32,18 @@ class TeamDetailView(RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return Team.objects.all()
 
-# class UserDetialView(RetrieveUpdateDestroyAPIView):
-#     serializer_class = UserSerializer
+class UserChoreDetailView(RetrieveUpdateDestroyAPIView):
+    serializer_class = UserChoreSerializer
 
-#     deg get_queryset(self):
-#     return User.Objects.all()
+    def get_queryset(self):
+        return Chore.objects.all()
+
+
+class UserChoreView(APIView):
+    def get(self,request, username):
+        lookup_field = 'username'
+        user = get_object_or_404(User, username=username)
+        queryset = user.chores.all()
+        serializer = UserChoreSerializer(queryset, many=True)
+        return Response(serializer.data)
+

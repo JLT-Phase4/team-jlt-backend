@@ -47,7 +47,7 @@ class Chore(models.Model):
         (ANYDAY, 'Anyday'),
     ]
     
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name="chores")
     name = models.CharField(max_length=300)
     detail = models.TextField(max_length=1000)
     chore_type = MultiSelectField(
