@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
+    'corsheaders',
     
 
     # Project-specific
@@ -58,7 +59,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -156,7 +158,7 @@ REST_FRAMEWORK = {
     ],
 }
 
-
+CORS_ALLOWED_ORIGINS = True
 
 ACCOUNT_ACTIVATION_DAYS = 7 # you can choose this
 REGISTRATION_AUTO_LOGIN = True # logs in user when they register
