@@ -158,7 +158,7 @@ REST_FRAMEWORK = {
     ],
 }
 
-CORS_ALLOWED_ORIGINS = True
+CORS_ALLOW_All_ORIGINS = True
 
 ACCOUNT_ACTIVATION_DAYS = 7 # you can choose this
 REGISTRATION_AUTO_LOGIN = True # logs in user when they register
