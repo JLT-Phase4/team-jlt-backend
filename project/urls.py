@@ -17,12 +17,15 @@ from django.contrib import admin
 from django.conf import settings
 from django.urls import include, path
 from core import views
+from core import views as api_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/test/', views.TestView.as_view()),
     path('api/auth/', include('djoser.urls')),
     path('api/auth/', include('djoser.urls.authtoken')),
+    path('api/teams/', api_views.TeamList.as_view()),
+    path('api/team-detail/<int:pk>/', api_views.TeamDetailView.as_view())
 ]
 
 if settings.DEBUG:
