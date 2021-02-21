@@ -62,6 +62,7 @@ class Chore(models.Model):
         return f'{self.name} , {self.user}'
 
 class Record(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name="records")
     chore = models.ForeignKey('Chore', on_delete=models.CASCADE)
     date = models.DateField(verbose_name="date-of-record")
     comment = models.TextField(max_length=1000)

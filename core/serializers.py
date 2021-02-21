@@ -57,9 +57,11 @@ class UserChoreSerializer(serializers.ModelSerializer):
 
 class RecordSerializer(serializers.ModelSerializer):
     chore = serializers.SlugRelatedField(read_only=True, slug_field='name')
+    user = serializers.SlugRelatedField(read_only=True, slug_field='username')
     class Meta:
         model = Record
         fields = [
+            'user',
             'pk',
             'chore',
             'date',
