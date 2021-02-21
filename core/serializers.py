@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Team, Chore
+from .models import User, Team, Chore, Record
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -53,4 +53,16 @@ class UserChoreSerializer(serializers.ModelSerializer):
             'detail',
             'chore_type',
 
+        ]
+
+class RecordSerializer(serializers.ModelSerializer):
+    chore = serializers.SlugRelatedField(read_only=True, slug_field='name')
+    class Meta:
+        model = Record
+        fields = [
+            'pk',
+            'chore',
+            'date',
+            'comment',
+            'complete',
         ]
