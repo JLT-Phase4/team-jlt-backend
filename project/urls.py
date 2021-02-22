@@ -21,7 +21,9 @@ from core import views as api_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/test/', views.TestView.as_view()),
+    path('api/my-profile/', views.LoggedInUserView.as_view()),
+    path('api/all-users/', views.AllUserView.as_view()),
+    path('api/user/<username>/', views.UserDetailView.as_view()),
     path('api/auth/', include('djoser.urls')),
     path('api/auth/', include('djoser.urls.authtoken')),
     path('api/teams/', api_views.TeamList.as_view()),

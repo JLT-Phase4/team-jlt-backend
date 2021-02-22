@@ -15,10 +15,25 @@ class IsUserOrReadOnly(permissions.BasePermission):
             return True
         return obj.user == request.user
 
-class TestView(APIView):
+class LoggedInUserView(APIView):
     def get(self,request):
-        serializer = UserSerializer(request.user)
+        user = self.request.user
+        serializer = UserSerializer(user)
         return Response(data=serializer.data)
+
+class AllUserView(APIView):
+    def get(self,request):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
+
+class UserDetailView(APIView):
+    def get(self,request,username):
+        lookup_field = 'username'
+        user = get_object_or_404(User, username=username)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
 
 class TeamList(APIView):
     def get(self,request):
@@ -100,5 +115,5 @@ class TeamListView(APIView):
 
         team.members.remove(user)
         
-        serializer = TeamCreateSerializer(team)
+        serializer = TeamSerializer(team)
         return Response(serializer.data)

@@ -19,7 +19,7 @@ class Team(models.Model):
     name = models.CharField(max_length=100, null=False)
     slogan = models.TextField(max_length=1000, null=False)
     captain = models.ForeignKey('User', on_delete=models.CASCADE, related_name='parent')
-    members = models.ManyToManyField('User', related_name='kids', blank=True)
+    members = models.ManyToManyField('User', related_name='teams', blank=True)
     theme_song = models.CharField(max_length=500, null=True, blank=True)
     background_image = models.CharField(max_length=500, null=True)
     dashboard_style = models.CharField(max_length=100)
