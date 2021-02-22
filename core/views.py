@@ -6,7 +6,7 @@ from .serializers import UserSerializer
 from rest_framework.response import Response
 from core.models import Team, User, Pod, Chore, Record
 from .serializers import TeamSerializer, TeamCreateSerializer, UserChoreSerializer, RecordSerializer
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView, ListCreateAPIView
 
 # Create your views here.
 class IsUserOrReadOnly(permissions.BasePermission):
@@ -116,4 +116,16 @@ class TeamListView(APIView):
         team.members.remove(user)
         
         serializer = TeamSerializer(team)
+        return Response(serializer.data)
+
+
+class TeamCreateListView(ListCreateAPIView):
+    queryset = Team.objects.all()
+    serializer_class = TeamSerializer
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def get(self,request):
+        teams = Team.objects.all()
+        serializer = TeamSerializer(teams, many=True)
         return Response(serializer.data)

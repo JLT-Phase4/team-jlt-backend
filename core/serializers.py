@@ -1,6 +1,16 @@
 from rest_framework import serializers
 from .models import User, Team, Chore, Record
 
+class AvatarSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'avatar',
+            'teams'
+        ]
+
 class RecordSerializer(serializers.ModelSerializer):
     chore = serializers.SlugRelatedField(read_only=True, slug_field='name')
     user = serializers.SlugRelatedField(read_only=True, slug_field='username')
@@ -64,6 +74,8 @@ class TeamCreateSerializer(serializers.ModelSerializer):
 
 class UserChoreSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(read_only=True, slug_field='username')
+    user = AvatarSerializer(read_only=True)
+    
     class Meta:
         model = Chore
         fields = [

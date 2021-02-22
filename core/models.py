@@ -17,8 +17,8 @@ class User(AbstractUser):
 
 class Team(models.Model):
     name = models.CharField(max_length=100, null=False)
-    slogan = models.TextField(max_length=1000, null=False)
-    captain = models.ForeignKey('User', on_delete=models.CASCADE, related_name='parent')
+    slogan = models.TextField(max_length=1000, null=True)
+    captain = models.ForeignKey('User', on_delete=models.CASCADE, related_name='parent', null=True, verbose_name="username")
     members = models.ManyToManyField('User', related_name='teams', blank=True)
     theme_song = models.CharField(max_length=500, null=True, blank=True)
     background_image = models.CharField(max_length=500, null=True)
