@@ -121,11 +121,11 @@ class TeamListView(APIView):
 
 class TeamCreateListView(ListCreateAPIView):
     queryset = Team.objects.all()
-    serializer_class = TeamSerializer
+    serializer_class = TeamCreateSerializer
     def perform_create(self, serializer):
         serializer.save()
 
     def get(self,request):
         teams = Team.objects.all()
-        serializer = TeamSerializer(teams, many=True)
+        serializer = TeamCreateSerializer(teams, many=True)
         return Response(serializer.data)
