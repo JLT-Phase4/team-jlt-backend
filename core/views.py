@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.views import APIView
+from rest_framework.exceptions import ParseError
 from rest_framework import permissions
 from .serializers import UserSerializer
 from rest_framework.response import Response
@@ -63,3 +64,41 @@ class RecordView(APIView):
         serializer = RecordSerializer(records, many=True)
         return Response(serializer.data)
     
+
+class TeamListView(APIView):
+    
+    def get(self, request, pk):
+        team = get_object_or_404(Team, pk=pk)
+        serializer = TeamCreateSerializer(team)
+        return Response(serializer.data)
+
+    def post(self, request, pk):
+        new_team_member_username = request.data.get('username')
+        team = get_object_or_404(Team, pk=pk)
+        
+        if not new_team_member_username:
+            raise ParseError("No username provided")
+        
+        user = User.objects.filter(username=new_team_member_username).first()
+        if user is None:
+            raise ParseError(f"User {new_team_member_username} does not exist")
+        
+        team.members.add(user)
+        
+        serializer = TeamCreateSerializer(team)
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        delete_member_username = request.data.get('username')
+        team = get_object_or_404(Team, pk=pk)
+        if not delete_member_username:
+            raise ParseError("No username provided")
+
+        user = User.objects.filter(username=delete_member_username).first()
+        if user is None:
+            raise ParseError(f"User {delete_member_username} does not exist")
+
+        team.members.remove(user)
+        
+        serializer = TeamCreateSerializer(team)
+        return Response(serializer.data)

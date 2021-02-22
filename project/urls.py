@@ -29,7 +29,8 @@ urlpatterns = [
     path('api/user-chore/<int:pk>/', api_views.UserChoreDetailView.as_view()),
     path('api/users/<username>/chores/', api_views.UserChoreView.as_view()),
     path('api/records/<int:pk>/', api_views.RecordDetailView.as_view()),
-    path('api/records/', api_views.RecordView.as_view())
+    path('api/records/', api_views.RecordView.as_view()),
+    path('api/team/<int:pk>/', api_views.TeamListView.as_view())
 ]
 
 if settings.DEBUG:
