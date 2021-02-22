@@ -123,7 +123,7 @@ class TeamCreateListView(ListCreateAPIView):
     queryset = Team.objects.all()
     serializer_class = TeamCreateSerializer
     def perform_create(self, serializer):
-        serializer.save()
+        serializer.save(captain=self.request.user)
 
     def get(self,request):
         teams = Team.objects.all()
