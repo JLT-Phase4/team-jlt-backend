@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Team, Chore, Record
+from .models import User, Team, Chore, Assignment
 
 class AvatarSerializer(serializers.ModelSerializer):
     
@@ -11,23 +11,23 @@ class AvatarSerializer(serializers.ModelSerializer):
             'teams'
         ]
 
-class RecordSerializer(serializers.ModelSerializer):
+class AssignmentSerializer(serializers.ModelSerializer):
     chore = serializers.SlugRelatedField(read_only=True, slug_field='name')
     user = serializers.SlugRelatedField(read_only=True, slug_field='username')
     class Meta:
-        model = Record
+        model = Assignment
         fields = [
             'user',
             'pk',
             'chore',
-            'date',
             'comment',
+            'assignment_type',
             'complete',
         ]
 
 class UserSerializer(serializers.ModelSerializer):
     chores = serializers.StringRelatedField(many=True, read_only=True)
-    records = RecordSerializer(many=True, read_only=True)
+    assignments = AssignmentSerializer(many=True, read_only=True)
     teams = serializers.StringRelatedField(many=True, read_only=True)
     class Meta:
         model = User
@@ -36,7 +36,7 @@ class UserSerializer(serializers.ModelSerializer):
             'username',
             'teams',
             'chores',
-            'records',
+            'assignments',
             
         ]
 
@@ -44,6 +44,7 @@ class UserSerializer(serializers.ModelSerializer):
 class TeamSerializer(serializers.ModelSerializer):
     captain = serializers.SlugRelatedField(read_only=True, slug_field='username')
     members = serializers.StringRelatedField(many=True, read_only=True)
+    chores = serializers.StringRelatedField(many=True, read_only=True)
     class Meta:
         model = Team
         fields = [
@@ -51,12 +52,14 @@ class TeamSerializer(serializers.ModelSerializer):
             'name',
             'captain',
             'members',
-            'background_image'
+            'background_image',
+            'chores'
         ]
 
 class TeamCreateSerializer(serializers.ModelSerializer):
     captain = serializers.SlugRelatedField(read_only=True, slug_field='username')
     members = serializers.StringRelatedField(many=True, read_only=True)
+    chores = serializers.StringRelatedField(many=True, read_only=True)
     class Meta:
         model = Team
         fields = [
@@ -67,7 +70,8 @@ class TeamCreateSerializer(serializers.ModelSerializer):
             'members',
             'theme_song',
             'background_image',
-            'dashboard_style'
+            'dashboard_style',
+            'chores'
 
         ]
 
@@ -90,6 +94,7 @@ class UserChoreSerializer(serializers.ModelSerializer):
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
+    assignments = AssignmentSerializer(many=True, read_only=True)
     class Meta:
         model = User
         fields = [
@@ -98,5 +103,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "first_name",
             'last_name',
             "avatar",
+            "assignments"
             
         ]
