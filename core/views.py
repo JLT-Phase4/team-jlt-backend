@@ -5,15 +5,16 @@ from rest_framework import permissions
 from .serializers import UserSerializer
 from rest_framework.response import Response
 from core.models import Team, User, Pod, Chore, Record
-from .serializers import TeamSerializer, TeamCreateSerializer, UserChoreSerializer, RecordSerializer
+from .serializers import TeamSerializer, TeamCreateSerializer, UserChoreSerializer, RecordSerializer, UserCreateSerializer
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView, ListCreateAPIView
 
 # Create your views here.
 class IsUserOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
+       
         if request.method in permissions.SAFE_METHODS:
             return True
-        return obj.user == request.user
+        return obj.user == user
 
 class LoggedInUserView(APIView):
     def get(self,request):
@@ -129,3 +130,11 @@ class TeamCreateListView(ListCreateAPIView):
         teams = Team.objects.all()
         serializer = TeamCreateSerializer(teams, many=True)
         return Response(serializer.data)
+
+
+class UserDetailView(RetrieveUpdateDestroyAPIView):
+    serializer_class = UserCreateSerializer
+    # permission_classes = (permissions.IsAuthenticated, IsUserOrReadOnly)
+    lookup_field = 'username'
+    def get_queryset(self):
+        return User.objects.all()

@@ -33,7 +33,8 @@ urlpatterns = [
     path('api/records/<int:pk>/', api_views.RecordDetailView.as_view()),
     path('api/records/', api_views.RecordView.as_view()),
     path('api/team/<int:pk>/', api_views.TeamListView.as_view()),
-    path('api/team-list/', api_views.TeamCreateListView.as_view())
+    path('api/team-list/', api_views.TeamCreateListView.as_view()),
+    path('api/users-detail/<username>/', api_views.UserDetailView.as_view()),
 ]
 
 if settings.DEBUG:
