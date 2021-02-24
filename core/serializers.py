@@ -12,8 +12,8 @@ class AvatarSerializer(serializers.ModelSerializer):
         ]
 
 class AssignmentSerializer(serializers.ModelSerializer):
-    chore = serializers.SlugRelatedField(read_only=True, slug_field='name')
-    user = serializers.SlugRelatedField(read_only=True, slug_field='username')
+    chore = serializers.SlugRelatedField(queryset=Chore.objects.all(), slug_field='name')
+    user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
     class Meta:
         model = Assignment
         fields = [
@@ -77,7 +77,7 @@ class TeamCreateSerializer(serializers.ModelSerializer):
 
 
 class ChoreSerializer(serializers.ModelSerializer):
-    team = serializers.SlugRelatedField(read_only=True, slug_field='name')
+    team = serializers.SlugRelatedField(queryset=Team.objects.all(), slug_field='name')
     
     class Meta:
         model = Chore
@@ -99,6 +99,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         fields = [
             'pk',
             'username',
+            'teams',
             "first_name",
             'last_name',
             "avatar",
