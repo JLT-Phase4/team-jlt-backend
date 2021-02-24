@@ -33,7 +33,7 @@ class Chore(models.Model):
     name = models.CharField(max_length=300)
     detail = models.TextField(max_length=1000)
     points = models.PositiveIntegerField(validators=[MaxValueValidator(10)])
-    team = models.ForeignKey('Team', on_delete=models.CASCADE, null=True, related_name='chores')
+    team = models.ForeignKey('Team', on_delete=models.CASCADE, related_name='chores')
     
 
     def __str__(self):

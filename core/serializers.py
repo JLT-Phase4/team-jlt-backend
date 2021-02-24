@@ -76,18 +76,17 @@ class TeamCreateSerializer(serializers.ModelSerializer):
         ]
 
 
-class UserChoreSerializer(serializers.ModelSerializer):
-    user = serializers.SlugRelatedField(read_only=True, slug_field='username')
-    user = AvatarSerializer(read_only=True)
+class ChoreSerializer(serializers.ModelSerializer):
+    team = serializers.SlugRelatedField(read_only=True, slug_field='name')
     
     class Meta:
         model = Chore
         fields = [
             'pk',
-            'user',
             'name',
             'detail',
-            'chore_type',
+            'points',
+            'team'
 
         ]
 

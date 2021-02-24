@@ -5,7 +5,7 @@ from rest_framework import permissions
 from .serializers import UserSerializer
 from rest_framework.response import Response
 from core.models import Team, User, Pod, Chore, Assignment
-from .serializers import TeamSerializer, TeamCreateSerializer, UserChoreSerializer, AssignmentSerializer, UserCreateSerializer
+from .serializers import TeamSerializer, TeamCreateSerializer, ChoreSerializer, AssignmentSerializer, UserCreateSerializer
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView, ListCreateAPIView
 
 # Create your views here.
@@ -128,4 +128,17 @@ class AssignmentCreateListView(ListCreateAPIView):
     def get(self,request):
         assignments = Assignment.objects.all()
         serializer = AssignmentSerializer(assignments, many=True)
+        return Response(serializer.data)
+
+
+class ChoreCreateListView(ListCreateAPIView):
+    
+    queryset = Chore.objects.all()
+    serializer_class = ChoreSerializer
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def get(self,request):
+        chores = Chore.objects.all()
+        serializer = ChoreSerializer(chores, many=True)
         return Response(serializer.data)
