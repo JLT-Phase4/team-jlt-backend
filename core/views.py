@@ -142,3 +142,18 @@ class ChoreCreateListView(ListCreateAPIView):
         chores = Chore.objects.all()
         serializer = ChoreSerializer(chores, many=True)
         return Response(serializer.data)
+
+
+class ChoreDetailView(RetrieveUpdateDestroyAPIView):
+    serializer_class = ChoreSerializer
+    # permission_classes = (permissions.IsAuthenticated, IsUserOrReadOnly)
+
+    def get_queryset(self):
+        return Chore.objects.all()
+
+class AssignmentDetailView(RetrieveUpdateDestroyAPIView):
+    serializer_class = AssignmentSerializer
+    # permission_classes = (permissions.IsAuthenticated, IsUserOrReadOnly)
+
+    def get_queryset(self):
+        return Assignment.objects.all()
