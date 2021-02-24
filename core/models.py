@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from multiselectfield import MultiSelectField
+from django.core.validators import MaxValueValidator
 
 class User(AbstractUser):
     USER_TYPE_CHOICES = (
@@ -28,6 +29,17 @@ class Team(models.Model):
         return self.name
 
 class Chore(models.Model):
+    
+    name = models.CharField(max_length=300)
+    detail = models.TextField(max_length=1000)
+    points = models.PositiveIntegerField(validators=[MaxValueValidator(10)])
+    team = models.ForeignKey('Team', on_delete=models.CASCADE, related_name='chores')
+    
+
+    def __str__(self):
+        return f'{self.name} , Team: {self.team}'
+
+class Assignment(models.Model):
     MONDAY = 'MD'
     TUESDAY = 'TUE'
     WEDNESDAY = 'WED'
@@ -46,31 +58,21 @@ class Chore(models.Model):
         (SUNDAY, 'Sunday'),
         (ANYDAY, 'Anyday'),
     ]
-    
-    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name="chores")
-    name = models.CharField(max_length=300)
-    detail = models.TextField(max_length=1000)
-    chore_type = MultiSelectField(
+    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name="assignments")
+    chore = models.ForeignKey('Chore', on_delete=models.CASCADE)
+    comment = models.TextField(max_length=1000)
+    complete = models.BooleanField(default=False)
+    assignment_type = MultiSelectField(
         max_length=50,
         choices=CHORE_TYPE_CHOICES,
         default=ANYDAY,
         max_choices=7,
         
     )
-
-    def __str__(self):
-        return f'{self.name} , {self.user}'
-
-class Record(models.Model):
-    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name="records")
-    chore = models.ForeignKey('Chore', on_delete=models.CASCADE)
-    date = models.DateField(verbose_name="date-of-record")
-    comment = models.TextField(max_length=1000)
-    complete = models.BooleanField(default=False)
     
 
-    def __datetime__(self):
-        return self.date
+    def __str__(self):
+        return f'{self.user} , {self.chore}'
 
 class Pod(models.Model):
     name = models.CharField(max_length=500, null=False)

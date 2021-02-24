@@ -4,8 +4,8 @@ from rest_framework.exceptions import ParseError
 from rest_framework import permissions
 from .serializers import UserSerializer
 from rest_framework.response import Response
-from core.models import Team, User, Pod, Chore, Record
-from .serializers import TeamSerializer, TeamCreateSerializer, UserChoreSerializer, RecordSerializer, UserCreateSerializer
+from core.models import Team, User, Pod, Chore, Assignment
+from .serializers import TeamSerializer, TeamCreateSerializer, ChoreSerializer, AssignmentSerializer, UserCreateSerializer
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView, ListCreateAPIView
 
 # Create your views here.
@@ -49,36 +49,16 @@ class TeamDetailView(RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return Team.objects.all()
 
-class UserChoreDetailView(RetrieveUpdateDestroyAPIView):
-    serializer_class = UserChoreSerializer
 
-    def get_queryset(self):
-        return Chore.objects.all()
-
-
-class UserChoreView(APIView):
-    def get(self,request, username):
+class UserAssignmentView(APIView):
+    def get(self,request,username):
         lookup_field = 'username'
         user = get_object_or_404(User, username=username)
-        queryset = user.chores.all()
-        serializer = UserChoreSerializer(queryset, many=True)
+        queryset = user.assignments.all()
+        serializer = AssignmentSerializer(queryset, many=True)
         return Response(serializer.data)
 
 
-
-class RecordDetailView(RetrieveUpdateDestroyAPIView):
-    serializer_class = RecordSerializer
-    # permission_classes = (permissions.IsAuthenticated, IsUserOrReadOnly)
-
-    def get_queryset(self):
-        return Record.objects.all()
-
-
-class RecordView(APIView):
-    def get(self,request):
-        records = Record.objects.all()
-        serializer = RecordSerializer(records, many=True)
-        return Response(serializer.data)
     
 
 class TeamListView(APIView):
@@ -138,3 +118,27 @@ class UserDetailView(RetrieveUpdateDestroyAPIView):
     lookup_field = 'username'
     def get_queryset(self):
         return User.objects.all()
+
+class AssignmentCreateListView(ListCreateAPIView):
+    queryset = Assignment.objects.all()
+    serializer_class = AssignmentSerializer
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def get(self,request):
+        assignments = Assignment.objects.all()
+        serializer = AssignmentSerializer(assignments, many=True)
+        return Response(serializer.data)
+
+
+class ChoreCreateListView(ListCreateAPIView):
+    
+    queryset = Chore.objects.all()
+    serializer_class = ChoreSerializer
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def get(self,request):
+        chores = Chore.objects.all()
+        serializer = ChoreSerializer(chores, many=True)
+        return Response(serializer.data)

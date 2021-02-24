@@ -28,13 +28,12 @@ urlpatterns = [
     path('api/auth/', include('djoser.urls.authtoken')),
     path('api/teams/', api_views.TeamList.as_view()),
     path('api/team-detail/<int:pk>/', api_views.TeamDetailView.as_view()),
-    path('api/user-chore/<int:pk>/', api_views.UserChoreDetailView.as_view()),
-    path('api/users/<username>/chores/', api_views.UserChoreView.as_view()),
-    path('api/records/<int:pk>/', api_views.RecordDetailView.as_view()),
-    path('api/records/', api_views.RecordView.as_view()),
     path('api/team/<int:pk>/', api_views.TeamListView.as_view()),
     path('api/team-list/', api_views.TeamCreateListView.as_view()),
     path('api/users-detail/<username>/', api_views.UserDetailView.as_view()),
+    path('api/users/<username>/assignments/', api_views.UserAssignmentView.as_view()),
+    path('api/assignment-details/', api_views.AssignmentCreateListView.as_view()),
+    path('api/chore-list/', api_views.ChoreCreateListView.as_view())
 ]
 
 if settings.DEBUG:
