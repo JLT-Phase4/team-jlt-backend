@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from multiselectfield import MultiSelectField
+from django import forms
 from django.core.validators import MaxValueValidator
 
 class User(AbstractUser):
@@ -40,35 +40,22 @@ class Chore(models.Model):
         return f'{self.name} , Team: {self.team}'
 
 class Assignment(models.Model):
-    MONDAY = 'MD'
-    TUESDAY = 'TUE'
-    WEDNESDAY = 'WED'
-    THURSDAY = 'THUR'
-    FRIDAY = 'FRI'
-    SATURDAY = 'SAT'
-    SUNDAY = 'SUN'
-    ANYDAY = 'ANY'
+    
     CHORE_TYPE_CHOICES = [
-        (MONDAY, 'Monday'),
-        (TUESDAY, 'Tuesday'),
-        (WEDNESDAY, 'Wednesday'),
-        (THURSDAY, 'Thursday'),
-        (FRIDAY, 'Friday'),
-        (SATURDAY, 'Saturday'),
-        (SUNDAY, 'Sunday'),
-        (ANYDAY, 'Anyday'),
+        ("MONDAY", 'Monday'),
+        ("TUESDAY", 'Tuesday'),
+        ("WEDNESDAY", 'Wednesday'),
+        ("THURSDAY", 'Thursday'),
+        ("FRIDAY", 'Friday'),
+        ("SATURDAY", 'Saturday'),
+        ("SUNDAY", 'Sunday'),
+        ("ANYDAY", 'Anyday'),
     ]
     user = models.ForeignKey('User', on_delete=models.CASCADE, related_name="assignments")
     chore = models.ForeignKey('Chore', on_delete=models.CASCADE)
     comment = models.TextField(max_length=1000)
     complete = models.BooleanField(default=False)
-    assignment_type = MultiSelectField(
-        max_length=50,
-        choices=CHORE_TYPE_CHOICES,
-        default=ANYDAY,
-        max_choices=7,
-        
-    )
+    assignment_type = models.CharField(max_length= 10, choices=CHORE_TYPE_CHOICES, default='ANYDAY')
     
 
     def __str__(self):

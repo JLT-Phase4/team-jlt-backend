@@ -32,8 +32,10 @@ urlpatterns = [
     path('api/team-list/', api_views.TeamCreateListView.as_view()),
     path('api/users-detail/<username>/', api_views.UserDetailView.as_view()),
     path('api/users/<username>/assignments/', api_views.UserAssignmentView.as_view()),
-    path('api/assignment-details/', api_views.AssignmentCreateListView.as_view()),
-    path('api/chore-list/', api_views.ChoreCreateListView.as_view())
+    path('api/assignment-list/', api_views.AssignmentCreateListView.as_view()),
+    path('api/chore-list/', api_views.ChoreCreateListView.as_view()),
+    path('api/chore-detail/<int:pk>/', api_views.ChoreDetailView.as_view()),
+    path('api/assignment-detail/<int:pk>/', api_views.AssignmentDetailView.as_view())
 ]
 
 if settings.DEBUG:
