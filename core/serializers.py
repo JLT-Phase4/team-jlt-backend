@@ -131,7 +131,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "first_name",
             'last_name',
             "avatar",
-            "assignments"
+            "assignments",
+            'user_type'
             
         ]
 
