@@ -40,10 +40,19 @@ class UserSerializer(serializers.ModelSerializer):
             
         ]
 
+class MemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'avatar',
+        ]
+
 
 class TeamSerializer(serializers.ModelSerializer):
+    members = MemberSerializer(read_only=True, many=True)
     captain = serializers.SlugRelatedField(read_only=True, slug_field='username')
-    members = serializers.StringRelatedField(many=True, read_only=True)
+    
     chores = serializers.StringRelatedField(many=True, read_only=True)
     class Meta:
         model = Team
@@ -58,7 +67,7 @@ class TeamSerializer(serializers.ModelSerializer):
 
 class TeamCreateSerializer(serializers.ModelSerializer):
     captain = serializers.SlugRelatedField(read_only=True, slug_field='username')
-    members = serializers.StringRelatedField(many=True, read_only=True)
+    members = MemberSerializer(read_only=True, many=True)
     chores = serializers.StringRelatedField(many=True, read_only=True)
     class Meta:
         model = Team
@@ -106,3 +115,4 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "assignments"
             
         ]
+
