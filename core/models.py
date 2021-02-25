@@ -37,7 +37,7 @@ class Chore(models.Model):
     
 
     def __str__(self):
-        return f'{self.name} , Team: {self.team}'
+        return f'{self.name}'
 
 class Assignment(models.Model):
     
