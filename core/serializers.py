@@ -10,8 +10,39 @@ class AvatarSerializer(serializers.ModelSerializer):
             'avatar',
             'teams'
         ]
+class ChoreSerializer(serializers.ModelSerializer):
+    team = serializers.SlugRelatedField(queryset=Team.objects.all(), slug_field='name')
+    
+    class Meta:
+        model = Chore
+        fields = [
+            'pk',
+            'name',
+            'detail',
+            'points',
+            'team'
+
+        ]
+
+    
 
 class AssignmentSerializer(serializers.ModelSerializer):
+    queryset = Chore.objects.all()
+    chore = ChoreSerializer(queryset)
+    # chore = serializers.SlugRelatedField(queryset=Chore.objects.all(), slug_field='name')
+    user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+    class Meta:
+        model = Assignment
+        fields = [
+            'user',
+            'pk',
+            'chore',
+            'comment',
+            'assignment_type',
+            'complete',
+        ]
+
+class AssignmentDetailSerializer(serializers.ModelSerializer):
     chore = serializers.SlugRelatedField(queryset=Chore.objects.all(), slug_field='name')
     user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
     class Meta:
@@ -24,6 +55,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
             'assignment_type',
             'complete',
         ]
+   
 
 class UserSerializer(serializers.ModelSerializer):
     chores = serializers.StringRelatedField(many=True, read_only=True)
@@ -85,19 +117,6 @@ class TeamCreateSerializer(serializers.ModelSerializer):
         ]
 
 
-class ChoreSerializer(serializers.ModelSerializer):
-    team = serializers.SlugRelatedField(queryset=Team.objects.all(), slug_field='name')
-    
-    class Meta:
-        model = Chore
-        fields = [
-            'pk',
-            'name',
-            'detail',
-            'points',
-            'team'
-
-        ]
 
 
 
@@ -116,3 +135,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
             
         ]
 
+# class PointCountSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model

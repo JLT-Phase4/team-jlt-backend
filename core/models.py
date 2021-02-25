@@ -52,7 +52,7 @@ class Assignment(models.Model):
         ("ANYDAY", 'Anyday'),
     ]
     user = models.ForeignKey('User', on_delete=models.CASCADE, related_name="assignments")
-    chore = models.ForeignKey('Chore', on_delete=models.CASCADE)
+    chore = models.ForeignKey('Chore', on_delete=models.CASCADE, related_name='chores')
     comment = models.TextField(max_length=1000)
     complete = models.BooleanField(default=False)
     assignment_type = models.CharField(max_length= 10, choices=CHORE_TYPE_CHOICES, default='ANYDAY')

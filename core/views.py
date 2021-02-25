@@ -4,8 +4,10 @@ from rest_framework.exceptions import ParseError
 from rest_framework import permissions
 from .serializers import UserSerializer
 from rest_framework.response import Response
+from django.db.models import Count
+from django.db.models import Sum
 from core.models import Team, User, Pod, Chore, Assignment
-from .serializers import TeamSerializer, TeamCreateSerializer, ChoreSerializer, AssignmentSerializer, UserCreateSerializer
+from .serializers import TeamSerializer, TeamCreateSerializer, ChoreSerializer, AssignmentSerializer, UserCreateSerializer, AssignmentDetailSerializer
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView, ListCreateAPIView
 
 # Create your views here.
@@ -152,8 +154,22 @@ class ChoreDetailView(RetrieveUpdateDestroyAPIView):
         return Chore.objects.all()
 
 class AssignmentDetailView(RetrieveUpdateDestroyAPIView):
-    serializer_class = AssignmentSerializer
+    serializer_class = AssignmentDetailSerializer
     # permission_classes = (permissions.IsAuthenticated, IsUserOrReadOnly)
 
     def get_queryset(self):
         return Assignment.objects.all()
+
+
+
+class PointCountView(APIView):
+    lookup_field = 'username'
+    serializer_class = AssignmentSerializer
+    def get(self,request,username):
+        user = get_object_or_404(User, username=username)
+        queryset = user.assignments.all().exclude(complete=False).aggregate(Sum('chore__points'))
+        return Response(queryset)
+
+
+
+
