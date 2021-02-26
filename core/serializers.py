@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Team, Chore, Assignment
+from .models import User, Team, Chore, Assignment, Pod
 
 class AvatarSerializer(serializers.ModelSerializer):
     
@@ -139,3 +139,25 @@ class UserCreateSerializer(serializers.ModelSerializer):
 # class PointCountSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model
+
+
+class PodSerializer(serializers.ModelSerializer):
+    teams = TeamCreateSerializer(many=True, read_only=True)
+    class Meta:
+        model = Pod
+        fields = [
+            'pk',
+            'name',
+            'teams',
+        ]
+
+class PodCreateSerializer(serializers.ModelSerializer):
+    teams = serializers.StringRelatedField(many=True, read_only=True)
+    class Meta:
+        model = Pod
+        fields = [
+            'pk',
+            'name',
+            'teams',
+        ]
+

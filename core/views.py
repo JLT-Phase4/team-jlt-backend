@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from django.db.models import Count
 from django.db.models import Sum
 from core.models import Team, User, Pod, Chore, Assignment
-from .serializers import TeamSerializer, TeamCreateSerializer, ChoreSerializer, AssignmentSerializer, UserCreateSerializer, AssignmentDetailSerializer
+from .serializers import TeamSerializer, TeamCreateSerializer, ChoreSerializer, AssignmentSerializer, UserCreateSerializer, AssignmentDetailSerializer, PodSerializer, PodCreateSerializer
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView, ListCreateAPIView
 
 # Create your views here.
@@ -171,5 +171,59 @@ class PointCountView(APIView):
         return Response(queryset)
 
 
+class PodDetailView(APIView):
+    def get(self,request,pk):
+        pod = get_object_or_404(Pod, pk=pk)
+        serializer = PodSerializer(pod)
+        return Response(serializer.data)
 
 
+
+class PodListView(APIView):
+    
+    def get(self, request, pk):
+        pod = get_object_or_404(Pod, pk=pk)
+        serializer = PodCreateSerializer(pod)
+        return Response(serializer.data)
+
+    def post(self, request, pk):
+        new_team = request.data.get('name')
+        pod = get_object_or_404(Pod, pk=pk)
+        
+        if not new_team:
+            raise ParseError("No Team provided")
+        
+        team = Team.objects.filter(name=new_team).first()
+        if team is None:
+            raise ParseError(f"Team {new_team} does not exist")
+        
+        pod.teams.add(team)
+        
+        serializer = PodCreateSerializer(pod)
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        delete_team = request.data.get('name')
+        pod = get_object_or_404(Pod, pk=pk)
+        if not delete_team:
+            raise ParseError("No Team provided")
+
+        team = Team.objects.filter(name=delete_team).first()
+        if team is None:
+            raise ParseError(f"Team {delete_team} does not exist")
+
+        pod.teams.remove(team)
+        
+        serializer = PodCreateSerializer(pod)
+        return Response(serializer.data)
+
+class PodCreateView(ListCreateAPIView):
+    queryset = Pod.objects.all()
+    serializer_class = PodCreateSerializer
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def get(self,request):
+        pods = Pod.objects.all()
+        serializer = PodSerializer(pods, many=True)
+        return Response(serializer.data)
