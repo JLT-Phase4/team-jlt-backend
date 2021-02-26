@@ -36,7 +36,10 @@ urlpatterns = [
     path('api/chore-list/', api_views.ChoreCreateListView.as_view()),
     path('api/chore-detail/<int:pk>/', api_views.ChoreDetailView.as_view()),
     path('api/assignment-detail/<int:pk>/', api_views.AssignmentDetailView.as_view()),
-    path('api/point-count/<username>/', api_views.PointCountView.as_view())
+    path('api/point-count/<username>/', api_views.PointCountView.as_view()),
+    path('api/pods/', api_views.PodCreateView.as_view()),
+    path('api/pod-list/<int:pk>/', api_views.PodListView.as_view()),
+    path('api/pod-detail/<int:pk>/', api_views.PodDetailView.as_view())
 ]
 
 if settings.DEBUG:
