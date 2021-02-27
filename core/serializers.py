@@ -84,7 +84,7 @@ class MemberSerializer(serializers.ModelSerializer):
 class TeamSerializer(serializers.ModelSerializer):
     members = MemberSerializer(read_only=True, many=True)
     captain = serializers.SlugRelatedField(read_only=True, slug_field='username')
-    
+    pods = serializers.StringRelatedField(many=True, read_only=True)
     chores = serializers.StringRelatedField(many=True, read_only=True)
     class Meta:
         model = Team
@@ -94,13 +94,15 @@ class TeamSerializer(serializers.ModelSerializer):
             'captain',
             'members',
             'background_image',
-            'chores'
+            'chores',
+            'pods'
         ]
 
 class TeamCreateSerializer(serializers.ModelSerializer):
     captain = serializers.SlugRelatedField(read_only=True, slug_field='username')
     members = MemberSerializer(read_only=True, many=True)
     chores = serializers.StringRelatedField(many=True, read_only=True)
+    pods = serializers.StringRelatedField(many=True, read_only=True)
     class Meta:
         model = Team
         fields = [
@@ -112,7 +114,8 @@ class TeamCreateSerializer(serializers.ModelSerializer):
             'theme_song',
             'background_image',
             'dashboard_style',
-            'chores'
+            'chores',
+            'pods'
 
         ]
 

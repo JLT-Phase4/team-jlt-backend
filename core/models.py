@@ -63,7 +63,7 @@ class Assignment(models.Model):
 
 class Pod(models.Model):
     name = models.CharField(max_length=500, null=False)
-    teams = models.ManyToManyField('Team', related_name='teams')
+    teams = models.ManyToManyField('Team', related_name='pods')
 
     def __str__(self):
         return self.name
