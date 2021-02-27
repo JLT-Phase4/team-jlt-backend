@@ -123,13 +123,13 @@ class UserDetailView(RetrieveUpdateDestroyAPIView):
 
 class AssignmentCreateListView(ListCreateAPIView):
     queryset = Assignment.objects.all()
-    serializer_class = AssignmentSerializer
+    serializer_class = AssignmentDetailSerializer
     def perform_create(self, serializer):
         serializer.save()
 
     def get(self,request):
         assignments = Assignment.objects.all()
-        serializer = AssignmentSerializer(assignments, many=True)
+        serializer = AssignmentDetailSerializer(assignments, many=True)
         return Response(serializer.data)
 
 
