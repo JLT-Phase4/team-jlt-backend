@@ -39,7 +39,15 @@ urlpatterns = [
     path('api/point-count/<username>/', api_views.PointCountView.as_view()),
     path('api/pods/', api_views.PodCreateView.as_view()),
     path('api/pod-list/<int:pk>/', api_views.PodListView.as_view()),
-    path('api/pod-detail/<int:pk>/', api_views.PodDetailView.as_view())
+    path('api/pod-detail/<int:pk>/', api_views.PodDetailView.as_view()),
+    path('api/point-count/monday/<username>/', api_views.MondayPointCount.as_view()),
+    path('api/point-count/tuesday/<username>/', api_views.TuesdayPointCount.as_view()),
+    path('api/point-count/wednesday/<username>/', api_views.WednesdayPointCount.as_view()),
+    path('api/point-count/thursday/<username>/', api_views.ThursdayPointCount.as_view()),
+    path('api/point-count/friday/<username>/', api_views.FridayPointCount.as_view()),
+    path('api/point-count/saturday/<username>/', api_views.SaturdayPointCount.as_view()),
+    path('api/point-count/Sunday/<username>/', api_views.SundayPointCount.as_view()),
+    path('api/point-count/any/<username>/', api_views.AnyPointCount.as_view()),
 ]
 
 if settings.DEBUG:

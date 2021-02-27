@@ -227,3 +227,68 @@ class PodCreateView(ListCreateAPIView):
         pods = Pod.objects.all()
         serializer = PodSerializer(pods, many=True)
         return Response(serializer.data)
+
+
+class MondayPointCount(APIView):
+    lookup_field = 'username'
+    serializer_class = AssignmentSerializer
+    def get(self,request,username):
+        user = get_object_or_404(User, username=username)
+        queryset = user.assignments.all().exclude(complete=False).filter(assignment_type="MONDAY").aggregate(Sum('chore__points'))
+        return Response(queryset)
+
+class TuesdayPointCount(APIView):
+    lookup_field = 'username'
+    serializer_class = AssignmentSerializer
+    def get(self,request,username):
+        user = get_object_or_404(User, username=username)
+        queryset = user.assignments.all().exclude(complete=False).filter(assignment_type="TUESDAY").aggregate(Sum('chore__points'))
+        return Response(queryset)
+
+class WednesdayPointCount(APIView):
+    lookup_field = 'username'
+    serializer_class = AssignmentSerializer
+    def get(self,request,username):
+        user = get_object_or_404(User, username=username)
+        queryset = user.assignments.all().exclude(complete=False).filter(assignment_type="WEDNESDAY").aggregate(Sum('chore__points'))
+        return Response(queryset)
+
+class ThursdayPointCount(APIView):
+    lookup_field = 'username'
+    serializer_class = AssignmentSerializer
+    def get(self,request,username):
+        user = get_object_or_404(User, username=username)
+        queryset = user.assignments.all().exclude(complete=False).filter(assignment_type="THURSDAY").aggregate(Sum('chore__points'))
+        return Response(queryset)
+
+class FridayPointCount(APIView):
+    lookup_field = 'username'
+    serializer_class = AssignmentSerializer
+    def get(self,request,username):
+        user = get_object_or_404(User, username=username)
+        queryset = user.assignments.all().exclude(complete=False).filter(assignment_type="FRIDAY").aggregate(Sum('chore__points'))
+        return Response(queryset)
+
+class SaturdayPointCount(APIView):
+    lookup_field = 'username'
+    serializer_class = AssignmentSerializer
+    def get(self,request,username):
+        user = get_object_or_404(User, username=username)
+        queryset = user.assignments.all().exclude(complete=False).filter(assignment_type="SATURDAY").aggregate(Sum('chore__points'))
+        return Response(queryset)
+
+class SundayPointCount(APIView):
+    lookup_field = 'username'
+    serializer_class = AssignmentSerializer
+    def get(self,request,username):
+        user = get_object_or_404(User, username=username)
+        queryset = user.assignments.all().exclude(complete=False).filter(assignment_type="SUNDAY").aggregate(Sum('chore__points'))
+        return Response(queryset)
+
+class AnyPointCount(APIView):
+    lookup_field = 'username'
+    serializer_class = AssignmentSerializer
+    def get(self,request,username):
+        user = get_object_or_404(User, username=username)
+        queryset = user.assignments.all().exclude(complete=False).filter(assignment_type="ANY").aggregate(Sum('chore__points'))
+        return Response(queryset)
