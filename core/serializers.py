@@ -43,7 +43,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
         ]
 
 class AssignmentDetailSerializer(serializers.ModelSerializer):
-    chore = serializers.SlugRelatedField(queryset=Chore.objects.all(), slug_field='name')
+    # chore = serializers.SlugRelatedField(queryset=Chore.objects.all(), slug_field='name')
     user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
     class Meta:
         model = Assignment
