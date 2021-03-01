@@ -32,7 +32,7 @@ class Chore(models.Model):
     
     name = models.CharField(max_length=300)
     detail = models.TextField(max_length=1000)
-    points = models.PositiveIntegerField(validators=[MaxValueValidator(10)])
+    points = models.PositiveIntegerField(validators=[MaxValueValidator(10)], default=0)
     team = models.ForeignKey('Team', on_delete=models.CASCADE, related_name='chores')
     
 
@@ -68,3 +68,18 @@ class Pod(models.Model):
     def __str__(self):
         return self.name
 
+
+class Notification(models.Model):
+    sender = models.ForeignKey('User', on_delete=models.CASCADE, related_name='user')
+    target = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True)
+    message = models.CharField(max_length=200, blank=False)
+    emoji = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        return self.message
+
+
+class Feed(models.Model):
+    team = models.ForeignKey('Team', on_delete=models.CASCADE, related_name='feed')
+    notification = models.ManyToManyField('Notification')
+    

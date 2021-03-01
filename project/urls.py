@@ -48,6 +48,8 @@ urlpatterns = [
     path('api/point-count/saturday/<username>/', api_views.SaturdayPointCount.as_view()),
     path('api/point-count/Sunday/<username>/', api_views.SundayPointCount.as_view()),
     path('api/point-count/any/<username>/', api_views.AnyPointCount.as_view()),
+    path('api/feeds/', api_views.AllFeedView.as_view()),
+    path('api/notifications/', api_views.AllNotificationView.as_view()),
 ]
 
 if settings.DEBUG:

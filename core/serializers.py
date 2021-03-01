@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Team, Chore, Assignment, Pod
+from .models import User, Team, Chore, Assignment, Pod, Feed, Notification
 
 class AvatarSerializer(serializers.ModelSerializer):
     
@@ -40,6 +40,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
             'comment',
             'assignment_type',
             'complete',
+            
         ]
 
 class AssignmentDetailSerializer(serializers.ModelSerializer):
@@ -135,9 +136,14 @@ class UserCreateSerializer(serializers.ModelSerializer):
             'last_name',
             "avatar",
             "assignments",
-            'user_type'
+            'user_type',
+            
             
         ]
+    def get(self,request,username):
+        user = get_object_or_404(User, username=username)
+        queryset = user.assignments.all().exclude(complete=False).aggregate(Sum('chore__points'))
+        return queryset
 
 # class PointCountSerializer(serializers.ModelSerializer):
 #     class Meta:
@@ -164,3 +170,21 @@ class PodCreateSerializer(serializers.ModelSerializer):
             'teams',
         ]
 
+class FeedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feed 
+        fields = [
+            'notification'
+        ]
+
+class NotificationSerializer(serializers.ModelSerializer):
+    sender = serializers.SlugRelatedField(read_only=True, slug_field='username')
+    class Meta:
+        model = Notification
+        fields = [
+            'sender',
+            'target',
+            'message',
+            'emoji',
+          
+        ]
