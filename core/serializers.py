@@ -139,6 +139,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
             'user_type',
             
             
+            
         ]
     def get(self,request,username):
         user = get_object_or_404(User, username=username)
@@ -171,10 +172,11 @@ class PodCreateSerializer(serializers.ModelSerializer):
         ]
 
 class FeedSerializer(serializers.ModelSerializer):
+    notifications = serializers.StringRelatedField(many=True, read_only=True)
     class Meta:
         model = Feed 
         fields = [
-            'notification'
+            'notifications'
         ]
 
 class NotificationSerializer(serializers.ModelSerializer):
@@ -182,9 +184,9 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = [
+            'feed',
             'sender',
             'target',
             'message',
             'emoji',
-          
         ]
