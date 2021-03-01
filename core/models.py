@@ -10,8 +10,6 @@ class User(AbstractUser):
   )
     user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, default=2)
     avatar = models.CharField(max_length=500, null=True, blank=True)
-    
-
 
     def __str__(self):
         return self.username
@@ -70,6 +68,7 @@ class Pod(models.Model):
 
 
 class Notification(models.Model):
+    feed = models.ForeignKey('Feed', on_delete=models.CASCADE, related_name='notifications')
     sender = models.ForeignKey('User', on_delete=models.CASCADE, related_name='user')
     target = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True)
     message = models.CharField(max_length=200, blank=False)
@@ -80,6 +79,7 @@ class Notification(models.Model):
 
 
 class Feed(models.Model):
-    team = models.ForeignKey('Team', on_delete=models.CASCADE, related_name='feed')
-    notification = models.ManyToManyField('Notification')
+    name = models.CharField(max_length=100)
     
+    def __str__(self):
+        return self.name

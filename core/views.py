@@ -36,6 +36,8 @@ class UserDetailView(APIView):
         user = get_object_or_404(User, username=username)
         serializer = UserSerializer(user)
         return Response(serializer.data)
+    
+
 
 
 class TeamList(APIView):
@@ -120,6 +122,7 @@ class UserDetailView(RetrieveUpdateDestroyAPIView):
     lookup_field = 'username'
     def get_queryset(self):
         return User.objects.all()
+    
 
 class AssignmentCreateListView(ListCreateAPIView):
     queryset = Assignment.objects.all()
@@ -164,11 +167,11 @@ class AssignmentDetailView(RetrieveUpdateDestroyAPIView):
 
 class PointCountView(APIView):
     lookup_field = 'username'
-    serializer_class = AssignmentSerializer
+    # serializer_class = AssignmentSerializer
     def get(self,request,username):
         user = get_object_or_404(User, username=username)
-        queryset = user.assignments.all().exclude(complete=False).aggregate(Sum('chore__points'))
-        return Response(queryset)
+        total_points = user.assignments.all().exclude(complete=False).aggregate(Sum('chore__points'))
+        return Response(total_points)
 
 
 class PodDetailView(APIView):
@@ -300,8 +303,26 @@ class AllFeedView(APIView):
         return Response(serializer.data)
 
 
-class AllNotificationView(APIView):
+
+
+class NotificationCreateView(ListCreateAPIView):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    def perform_create(self, serializer):
+        serializer.save(sender=self.request.user)
+
     def get(self,request):
         notifications = Notification.objects.all()
         serializer = NotificationSerializer(notifications, many=True)
+        return Response(serializer.data)
+
+class FeedCreateView(ListCreateAPIView):
+    queryset = Feed.objects.all()
+    serializer_class = FeedSerializer
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def get(self,request):
+        feeds = Feed.objects.all()
+        serializer = FeedSerializer(feeds, many=True)
         return Response(serializer.data)
