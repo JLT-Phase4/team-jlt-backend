@@ -6,8 +6,8 @@ from .serializers import UserSerializer
 from rest_framework.response import Response
 from django.db.models import Count
 from django.db.models import Sum
-from core.models import Team, User, Pod, Chore, Assignment
-from .serializers import TeamSerializer, TeamCreateSerializer, ChoreSerializer, AssignmentSerializer, UserCreateSerializer, AssignmentDetailSerializer, PodSerializer, PodCreateSerializer
+from core.models import Team, User, Pod, Chore, Assignment, Feed, Notification
+from .serializers import TeamSerializer, TeamCreateSerializer, ChoreSerializer, AssignmentSerializer, UserCreateSerializer, AssignmentDetailSerializer, PodSerializer, PodCreateSerializer, FeedSerializer, NotificationSerializer
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView, ListCreateAPIView
 
 # Create your views here.
@@ -292,3 +292,16 @@ class AnyPointCount(APIView):
         user = get_object_or_404(User, username=username)
         queryset = user.assignments.all().exclude(complete=False).filter(assignment_type="ANY").aggregate(Sum('chore__points'))
         return Response(queryset)
+
+class AllFeedView(APIView):
+    def get(self,request):
+        feeds = Feed.objects.all()
+        serializer = FeedSerializer(feeds, many=True)
+        return Response(serializer.data)
+
+
+class AllNotificationView(APIView):
+    def get(self,request):
+        notifications = Notification.objects.all()
+        serializer = NotificationSerializer(notifications, many=True)
+        return Response(serializer.data)
