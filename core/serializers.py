@@ -191,6 +191,8 @@ class FeedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feed 
         fields = [
+            'pk',
+            'team',
             'notifications'
         ]
 
