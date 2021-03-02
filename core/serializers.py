@@ -225,16 +225,6 @@ class PodCreateSerializer(serializers.ModelSerializer):
             'teams',
         ]
 
-class FeedSerializer(serializers.ModelSerializer):
-    notifications = serializers.StringRelatedField(many=True, read_only=True)
-    class Meta:
-        model = Feed 
-        fields = [
-            'pk',
-            'team',
-            'notifications'
-        ]
-
 class NotificationSerializer(serializers.ModelSerializer):
     sender = serializers.SlugRelatedField(read_only=True, slug_field='username')
     class Meta:
@@ -247,3 +237,14 @@ class NotificationSerializer(serializers.ModelSerializer):
             'emoji',
             'notification_type'
         ]
+
+class FeedSerializer(serializers.ModelSerializer):
+    notifications = NotificationSerializer(many=True, read_only=True)
+    class Meta:
+        model = Feed 
+        fields = [
+            'pk',
+            'pod',
+            'notifications'
+        ]
+
