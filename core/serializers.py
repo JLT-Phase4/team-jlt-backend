@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import User, Team, Chore, Assignment, Pod, Feed, Notification
 from django.db.models import Sum
 
+
 class AvatarSerializer(serializers.ModelSerializer):
     
     class Meta:
@@ -132,7 +133,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return obj.assignments.filter(complete=True).aggregate(Sum('chore__points'))
 
     def get_monday_chore_points(self,obj):
-        return obj.assignments.exclude(complete=False).filter(assignment_type='MONDAY').aggregate(Sum('chore__points'))
+        return obj.assignments.exclude(complete=False).filter(assignment_type='MONDAY').aggregate(Sum('chore__points', null=0))
     
     def get_tuesday_chore_points(self,obj):
         return obj.assignments.exclude(complete=False).filter(assignment_type='TUESDAY').aggregate(Sum('chore__points'))

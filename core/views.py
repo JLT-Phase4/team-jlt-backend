@@ -326,3 +326,10 @@ class FeedCreateView(ListCreateAPIView):
         feeds = Feed.objects.all()
         serializer = FeedSerializer(feeds, many=True)
         return Response(serializer.data)
+
+class FeedDetailView(RetrieveUpdateDestroyAPIView):
+    serializer_class = FeedSerializer
+    # permission_classes = (permissions.IsAuthenticated, IsUserOrReadOnly)
+
+    def get_queryset(self):
+        return Feed.objects.all()
