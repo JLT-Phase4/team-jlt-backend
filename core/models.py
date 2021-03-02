@@ -10,6 +10,8 @@ class User(AbstractUser):
   )
     user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, default=2)
     avatar = models.CharField(max_length=500, null=True, blank=True)
+    
+    
 
     def __str__(self):
         return self.username
