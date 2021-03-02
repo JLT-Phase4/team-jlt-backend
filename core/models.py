@@ -68,11 +68,23 @@ class Pod(models.Model):
 
 
 class Notification(models.Model):
+
+    NOTIFICATION_TYPE_CHOICES = [
+        ("MONDAY", 'Monday'),
+        ("TUESDAY", 'Tuesday'),
+        ("WEDNESDAY", 'Wednesday'),
+        ("THURSDAY", 'Thursday'),
+        ("FRIDAY", 'Friday'),
+        ("SATURDAY", 'Saturday'),
+        ("SUNDAY", 'Sunday'),
+        ("ANYDAY", 'Anyday'),
+    ]
     feed = models.ForeignKey('Feed', on_delete=models.CASCADE, related_name='notifications')
-    sender = models.ForeignKey('User', on_delete=models.CASCADE, related_name='user')
+    sender = models.ForeignKey('User', on_delete=models.CASCADE, related_name='user', blank=True, null=True)
     target = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True)
     message = models.CharField(max_length=200, blank=False)
     emoji = models.CharField(max_length=100, blank=True)
+    notification_type = models.CharField(max_length= 10, choices= NOTIFICATION_TYPE_CHOICES, default='ANYDAY')
 
     def __str__(self):
         return self.message
