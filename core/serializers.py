@@ -97,6 +97,13 @@ class UserCreateSerializer(serializers.ModelSerializer):
     assignments = AssignmentSerializer(many=True, read_only=True)
     possible_chore_points = serializers.SerializerMethodField()
     earned_chore_points = serializers.SerializerMethodField()
+    monday_chore_points = serializers.SerializerMethodField()
+    tuesday_chore_points = serializers.SerializerMethodField()
+    wednesday_chore_points = serializers.SerializerMethodField()
+    thursday_chore_points = serializers.SerializerMethodField()
+    friday_chore_points = serializers.SerializerMethodField()
+    saturday_chore_points = serializers.SerializerMethodField()
+    sunday_chore_points = serializers.SerializerMethodField()
     class Meta:
         model = User
         fields = [
@@ -109,13 +116,44 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "assignments",
             'user_type',
             'possible_chore_points',
-            'earned_chore_points'
+            'earned_chore_points',
+            'monday_chore_points',
+            'tuesday_chore_points',
+            'wednesday_chore_points',
+            'thursday_chore_points',
+            'friday_chore_points',
+            'saturday_chore_points',
+            'sunday_chore_points'
             ]
     def get_possible_chore_points(self,obj):
         return obj.assignments.aggregate(Sum('chore__points'))
         
     def get_earned_chore_points(self,obj):
         return obj.assignments.filter(complete=True).aggregate(Sum('chore__points'))
+
+    def get_monday_chore_points(self,obj):
+        return obj.assignments.exclude(complete=False).filter(assignment_type='MONDAY').aggregate(Sum('chore__points'))
+    
+    def get_tuesday_chore_points(self,obj):
+        return obj.assignments.exclude(complete=False).filter(assignment_type='TUESDAY').aggregate(Sum('chore__points'))
+
+    def get_wednesday_chore_points(self,obj):
+        return obj.assignments.exclude(complete=False).filter(assignment_type='WEDNESDAY').aggregate(Sum('chore__points'))
+
+    def get_thursday_chore_points(self,obj):
+        return obj.assignments.exclude(complete=False).filter(assignment_type='THURSDAY').aggregate(Sum('chore__points'))
+
+    def get_friday_chore_points(self,obj):
+        return obj.assignments.exclude(complete=False).filter(assignment_type='FRIDAY').aggregate(Sum('chore__points'))
+
+    def get_saturday_chore_points(self,obj):
+        return obj.assignments.exclude(complete=False).filter(assignment_type='SATURDAY').aggregate(Sum('chore__points'))
+
+    def get_sunday_chore_points(self,obj):
+        return obj.assignments.exclude(complete=False).filter(assignment_type='SUNDAY').aggregate(Sum('chore__points'))
+
+   
+
 
 class TeamSerializer(serializers.ModelSerializer):
     members = UserCreateSerializer(read_only=True, many=True)
