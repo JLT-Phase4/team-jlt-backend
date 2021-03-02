@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import User, Team, Chore, Assignment, Pod, Feed, Notification
+from django.db.models import Sum
 
 class AvatarSerializer(serializers.ModelSerializer):
     
@@ -31,8 +32,11 @@ class AssignmentSerializer(serializers.ModelSerializer):
     chore = ChoreSerializer(queryset)
     # chore = serializers.SlugRelatedField(queryset=Chore.objects.all(), slug_field='name')
     user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+    
+
     class Meta:
         model = Assignment
+        
         fields = [
             'user',
             'pk',
@@ -40,8 +44,16 @@ class AssignmentSerializer(serializers.ModelSerializer):
             'comment',
             'assignment_type',
             'complete',
-            
         ]
+
+    
+        
+           
+            
+            
+        
+    
+        
 
 class AssignmentDetailSerializer(serializers.ModelSerializer):
     # chore = serializers.SlugRelatedField(queryset=Chore.objects.all(), slug_field='name')
@@ -81,9 +93,32 @@ class MemberSerializer(serializers.ModelSerializer):
             'avatar',
         ]
 
+class UserCreateSerializer(serializers.ModelSerializer):
+    assignments = AssignmentSerializer(many=True, read_only=True)
+    possible_chore_points = serializers.SerializerMethodField()
+    earned_chore_points = serializers.SerializerMethodField()
+    class Meta:
+        model = User
+        fields = [
+            'pk',
+            'username',
+            'teams',
+            "first_name",
+            'last_name',
+            "avatar",
+            "assignments",
+            'user_type',
+            'possible_chore_points',
+            'earned_chore_points'
+            ]
+    def get_possible_chore_points(self,obj):
+        return obj.assignments.aggregate(Sum('chore__points'))
+        
+    def get_earned_chore_points(self,obj):
+        return obj.assignments.filter(complete=True).aggregate(Sum('chore__points'))
 
 class TeamSerializer(serializers.ModelSerializer):
-    members = MemberSerializer(read_only=True, many=True)
+    members = UserCreateSerializer(read_only=True, many=True)
     captain = serializers.SlugRelatedField(read_only=True, slug_field='username')
     pods = serializers.StringRelatedField(many=True, read_only=True)
     chores = serializers.StringRelatedField(many=True, read_only=True)
@@ -99,9 +134,12 @@ class TeamSerializer(serializers.ModelSerializer):
             'pods'
         ]
 
+        
+    
+
 class TeamCreateSerializer(serializers.ModelSerializer):
     captain = serializers.SlugRelatedField(read_only=True, slug_field='username')
-    members = MemberSerializer(read_only=True, many=True)
+    members = UserCreateSerializer(read_only=True, many=True)
     chores = serializers.StringRelatedField(many=True, read_only=True)
     pods = serializers.StringRelatedField(many=True, read_only=True)
     class Meta:
@@ -124,31 +162,8 @@ class TeamCreateSerializer(serializers.ModelSerializer):
 
 
 
-class UserCreateSerializer(serializers.ModelSerializer):
-    assignments = AssignmentSerializer(many=True, read_only=True)
-    class Meta:
-        model = User
-        fields = [
-            'pk',
-            'username',
-            'teams',
-            "first_name",
-            'last_name',
-            "avatar",
-            "assignments",
-            'user_type',
-            
-            
-            
-        ]
-    def get(self,request,username):
-        user = get_object_or_404(User, username=username)
-        queryset = user.assignments.all().exclude(complete=False).aggregate(Sum('chore__points'))
-        return queryset
 
-# class PointCountSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model
+ 
 
 
 class PodSerializer(serializers.ModelSerializer):
