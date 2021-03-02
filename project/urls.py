@@ -50,6 +50,7 @@ urlpatterns = [
     path('api/point-count/any/<username>/', api_views.AnyPointCount.as_view()),
     path('api/feeds/', api_views.FeedCreateView.as_view()),
     path('api/notifications/', api_views.NotificationCreateView.as_view()),
+    path('api/feed-detail/<int:pk>/', api_views.FeedDetailView.as_view()),
 ]
 
 if settings.DEBUG:
