@@ -81,5 +81,5 @@ class Notification(models.Model):
 class Feed(models.Model):
     team = models.ForeignKey('Team', on_delete=models.CASCADE)
     
-    def __str__(self):
-        return self.team
+    # def __str__(self):
+    #     return self.team
