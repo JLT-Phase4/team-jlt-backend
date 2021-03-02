@@ -245,4 +245,5 @@ class NotificationSerializer(serializers.ModelSerializer):
             'target',
             'message',
             'emoji',
+            'notification_type'
         ]
