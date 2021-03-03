@@ -123,6 +123,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "avatar",
             "assignments",
             'user_type',
+            'feed',
             'possible_chore_points',
             'earned_chore_points',
             'monday_chore_points',
@@ -228,7 +229,8 @@ class TeamCreateSerializer(serializers.ModelSerializer):
             'background_image',
             'dashboard_style',
             'chores',
-            'pods'
+            'pods',
+            'feed'
 
         ]
 
@@ -258,6 +260,7 @@ class PodCreateSerializer(serializers.ModelSerializer):
             'pk',
             'name',
             'teams',
+            'feed'
         ]
 
 class NotificationSerializer(serializers.ModelSerializer):
@@ -280,6 +283,8 @@ class FeedSerializer(serializers.ModelSerializer):
         fields = [
             'pk',
             'pod',
+            'team',
+            'user',
             'notifications'
         ]
 
