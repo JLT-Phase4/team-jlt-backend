@@ -81,7 +81,7 @@ class Notification(models.Model):
     ]
     feed = models.ForeignKey('Feed', on_delete=models.CASCADE, related_name='notifications')
     sender = models.ForeignKey('User', on_delete=models.CASCADE, related_name='user', blank=True, null=True)
-    target = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True)
+    target = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=False)
     message = models.CharField(max_length=200, blank=False)
     emoji = models.CharField(max_length=100, blank=True)
     notification_type = models.CharField(max_length= 10, choices= NOTIFICATION_TYPE_CHOICES, default='ANYDAY')
