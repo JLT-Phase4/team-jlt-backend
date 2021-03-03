@@ -71,7 +71,7 @@ class FeedSerializer(serializers.ModelSerializer):
             'user',
             'notifications'
         ]    
-           
+    
             
             
         
@@ -268,12 +268,14 @@ class TeamCreateSerializer(serializers.ModelSerializer):
 
 class PodSerializer(serializers.ModelSerializer):
     teams = TeamCreateSerializer(many=True, read_only=True)
+    feed = FeedSerializer(many=True, read_only=True)
     class Meta:
         model = Pod
         fields = [
             'pk',
             'name',
             'teams',
+            'feed'
         ]
 
 class PodCreateSerializer(serializers.ModelSerializer):
