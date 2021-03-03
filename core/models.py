@@ -91,7 +91,8 @@ class Notification(models.Model):
 
 
 class Feed(models.Model):
-    pod = models.ForeignKey('Pod', on_delete=models.CASCADE, null=True)
-    
+    pod = models.ForeignKey('Pod', on_delete=models.CASCADE, null=True, blank=True, related_name='feed')
+    team = models.ForeignKey('Team', on_delete=models.CASCADE, null=True, blank=True, related_name='feed')
+    user = models.ForeignKey('User', on_delete=models.CASCADE, null=True, blank=True, related_name='feed')
     # def __str__(self):
     #     return self.pod
