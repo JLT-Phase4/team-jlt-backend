@@ -46,9 +46,30 @@ class AssignmentSerializer(serializers.ModelSerializer):
             'assignment_type',
             'complete',
         ]
-
+class NotificationSerializer(serializers.ModelSerializer):
+    sender = serializers.SlugRelatedField(read_only=True, slug_field='username')
+    class Meta:
+        model = Notification
+        fields = [
+            'feed',
+            'sender',
+            'target',
+            'message',
+            'emoji',
+            'notification_type'
+        ]
     
-        
+class FeedSerializer(serializers.ModelSerializer):
+    notifications = NotificationSerializer(many=True, read_only=True)
+    class Meta:
+        model = Feed 
+        fields = [
+            'pk',
+            'pod',
+            'team',
+            'user',
+            'notifications'
+        ]    
            
             
             
@@ -112,6 +133,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
     friday_possible_points = serializers.SerializerMethodField()
     saturday_possible_points = serializers.SerializerMethodField()
     sunday_possible_points = serializers.SerializerMethodField()
+    feed = FeedSerializer(many=True, read_only=True)
     class Meta:
         model = User
         fields = [
@@ -217,6 +239,7 @@ class TeamCreateSerializer(serializers.ModelSerializer):
     members = UserCreateSerializer(read_only=True, many=True)
     chores = serializers.StringRelatedField(many=True, read_only=True)
     pods = serializers.StringRelatedField(many=True, read_only=True)
+    feed = FeedSerializer(many=True, read_only=True)
     class Meta:
         model = Team
         fields = [
@@ -254,6 +277,7 @@ class PodSerializer(serializers.ModelSerializer):
 
 class PodCreateSerializer(serializers.ModelSerializer):
     teams = serializers.StringRelatedField(many=True, read_only=True)
+    feed = FeedSerializer(many=True, read_only=True)
     class Meta:
         model = Pod
         fields = [
@@ -263,28 +287,7 @@ class PodCreateSerializer(serializers.ModelSerializer):
             'feed'
         ]
 
-class NotificationSerializer(serializers.ModelSerializer):
-    sender = serializers.SlugRelatedField(read_only=True, slug_field='username')
-    class Meta:
-        model = Notification
-        fields = [
-            'feed',
-            'sender',
-            'target',
-            'message',
-            'emoji',
-            'notification_type'
-        ]
 
-class FeedSerializer(serializers.ModelSerializer):
-    notifications = NotificationSerializer(many=True, read_only=True)
-    class Meta:
-        model = Feed 
-        fields = [
-            'pk',
-            'pod',
-            'team',
-            'user',
-            'notifications'
-        ]
+
+
 
