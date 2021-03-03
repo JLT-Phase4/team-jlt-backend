@@ -48,6 +48,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
         ]
 class NotificationSerializer(serializers.ModelSerializer):
     sender = serializers.SlugRelatedField(read_only=True, slug_field='username')
+    target = serializers.SlugRelatedField(read_only=True, slug_field='username')
     class Meta:
         model = Notification
         fields = [
