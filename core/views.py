@@ -333,3 +333,22 @@ class FeedDetailView(RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Feed.objects.all()
+
+
+# class NotificationFireView(ListCreateAPIView):
+#     serializer_class = NotificationSerializer
+#     assignments = Assignment.objects.all()
+#     notifications = Notification.objects.all()   
+
+#     def perform_create(self, serializer):
+#         if assignments.complete == False:
+#             pass
+#         else:
+#             serializer.save()
+
+#     def get(self,request):
+#         notifications = Notification.objects.all()
+#         serializer = NotificationSerializer(notifications, many=True)
+#         return Response(serializer.data)
+    
+
