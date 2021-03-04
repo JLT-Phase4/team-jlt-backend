@@ -47,7 +47,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
             'complete',
         ]
 class NotificationSerializer(serializers.ModelSerializer):
-    sender = serializers.SlugRelatedField(read_only=True, slug_field='username')
+    sender = AvatarSerializer(read_only=True)
     target = serializers.SlugRelatedField(read_only=True, slug_field='username')
     class Meta:
         model = Notification
