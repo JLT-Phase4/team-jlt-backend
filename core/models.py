@@ -85,6 +85,7 @@ class Notification(models.Model):
     message = models.CharField(max_length=200, blank=False)
     emoji = models.CharField(max_length=100, blank=True)
     notification_type = models.CharField(max_length= 10, choices= NOTIFICATION_TYPE_CHOICES, default='ANYDAY')
+    published = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.message

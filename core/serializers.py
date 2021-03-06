@@ -57,7 +57,8 @@ class NotificationSerializer(serializers.ModelSerializer):
             'target',
             'message',
             'emoji',
-            'notification_type'
+            'notification_type',
+            'published'
         ]
     
 class FeedSerializer(serializers.ModelSerializer):
