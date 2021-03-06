@@ -18,6 +18,7 @@ from django.conf import settings
 from django.urls import include, path
 from core import views
 from core import views as api_views
+from actstream.feeds import CustomJSONActivityFeed
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,7 +37,7 @@ urlpatterns = [
     path('api/chore-list/', api_views.ChoreCreateListView.as_view()),
     path('api/chore-detail/<int:pk>/', api_views.ChoreDetailView.as_view()),
     path('api/assignment-detail/<int:pk>/', api_views.AssignmentDetailView.as_view()),
-    path('api/point-count/<username>/', api_views.PointCountView.as_view()),
+    path('api/point-count/<int:pk>/', api_views.PointCountView.as_view()),
     path('api/pods/', api_views.PodCreateView.as_view()),
     path('api/pod-list/<int:pk>/', api_views.PodListView.as_view()),
     path('api/pod-detail/<int:pk>/', api_views.PodDetailView.as_view()),
@@ -51,7 +52,9 @@ urlpatterns = [
     path('api/feeds/', api_views.FeedCreateView.as_view()),
     path('api/notifications/', api_views.NotificationCreateView.as_view()),
     path('api/feed-detail/<int:pk>/', api_views.FeedDetailView.as_view()),
-]
+    path('api/activity/', include('actstream.urls')),
+    # path('api/feeds/activity/saved/', CustomJSONActivityFeed.as_view(name='activity')),
+    ]
 
 if settings.DEBUG:
     import debug_toolbar

@@ -19,6 +19,8 @@ gunicorn = "*"
 djangorestframework = "*"
 djoser = "*"
 django-cors-headers = "*"
+django-activity-stream = "*"
+django-jsonfield = "*"
 
 [requires]
 python_version = "3.8"

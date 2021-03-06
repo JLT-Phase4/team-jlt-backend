@@ -232,7 +232,7 @@ class TeamSerializer(serializers.ModelSerializer):
             'pods'
         ]
 
-        
+    
     
 
 class TeamCreateSerializer(serializers.ModelSerializer):
@@ -241,6 +241,7 @@ class TeamCreateSerializer(serializers.ModelSerializer):
     chores = serializers.StringRelatedField(many=True, read_only=True)
     pods = serializers.StringRelatedField(many=True, read_only=True)
     feed = FeedSerializer(many=True, read_only=True)
+    
     class Meta:
         model = Team
         fields = [
@@ -254,10 +255,11 @@ class TeamCreateSerializer(serializers.ModelSerializer):
             'dashboard_style',
             'chores',
             'pods',
-            'feed'
+            'feed',
+            
 
         ]
-
+    
 
 
 
