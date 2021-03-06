@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.views import APIView
 from actstream import action
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
 from rest_framework.exceptions import ParseError
 from rest_framework import permissions
 from .serializers import UserSerializer
@@ -369,15 +370,27 @@ class FeedDetailView(RetrieveUpdateDestroyAPIView):
 #     action.send(user, verb="completed", target=assignment)
 
 
-def my_handler(sender, created, instance, **kwargs):
+# def my_handler(sender, created, instance, **kwargs):
         
-        # instance = Assignment._meta.get_field('comment')
-        action.send(instance, verb='Marked as Complete')
+#         # instance = Assignment.objects.all(get_field('complete'))
+#         action.send(instance, verb='Marked as Complete testing')
     
-post_save.connect(my_handler, sender=Assignment)
+# post_save.connect(my_handler, sender=Assignment)
 
 
 # def my_handler(sender, created, instance, **kwargs):
 #     action_object_stream(complete)
 
 # post_save.connect(my_handler, sender=Assignment)
+
+@receiver(pre_save, sender=Assignment)
+def do_something_if_changed(sender, instance, **kwargs):
+    try:
+        old_version = sender.objects.get(pk=instance.pk)
+    except sender.DoesNotExist:
+        pass # Object is new, so field hasn't technically changed, but you may want to do something else here.
+    else:
+        if not old_version.complete == instance.complete: # Field has changed
+            action.send(instance, verb='completed')  
+
+    
