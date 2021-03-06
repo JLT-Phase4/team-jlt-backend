@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'registration',
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites',
+    'actstream',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -57,6 +59,7 @@ INSTALLED_APPS = [
     # Project-specific
     'core',
 ]
+SITE_ID = 1
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -145,6 +148,13 @@ INTERNAL_IPS = [
     '127.0.0.1',
     # ...
 ]
+ACTSTREAM_SETTINGS = {
+    # 'MANAGER': 'core.managers.MyActionManager',
+    'FETCH_RELATIONS': True,
+    'USE_PREFETCH': True,
+    # 'USE_JSONFIELD': True,
+    'GFK_FETCH_DEPTH': 1,
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -167,3 +177,4 @@ LOGIN_REDIRECT_URL = '/' # where user is sent after login
 import django_on_heroku
 django_on_heroku.settings(locals())
 del DATABASES['default']['OPTIONS']['sslmode']
+

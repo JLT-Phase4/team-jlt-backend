@@ -1,9 +1,14 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.views import APIView
+from actstream import action
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
 from rest_framework.exceptions import ParseError
 from rest_framework import permissions
 from .serializers import UserSerializer
 from rest_framework.response import Response
+from actstream.managers import ActionManager, stream
+from actstream.models import action_object_stream
 from django.db.models import Count
 from django.db.models import Sum
 from core.models import Team, User, Pod, Chore, Assignment, Feed, Notification
@@ -135,6 +140,12 @@ class AssignmentCreateListView(ListCreateAPIView):
         serializer = AssignmentDetailSerializer(assignments, many=True)
         return Response(serializer.data)
 
+    # def my_handler(sender, instance, created, **kwargs):
+        
+    #     action.send(instance, verb='was complete')
+
+    # post_save.connect(my_handler, sender=Assignment)
+    
 
 class ChoreCreateListView(ListCreateAPIView):
     
@@ -166,11 +177,11 @@ class AssignmentDetailView(RetrieveUpdateDestroyAPIView):
 
 
 class PointCountView(APIView):
-    lookup_field = 'username'
+    lookup_field = 'pk'
     # serializer_class = AssignmentSerializer
-    def get(self,request,username):
-        user = get_object_or_404(User, username=username)
-        total_points = user.assignments.all().exclude(complete=False).aggregate(Sum('chore__points'))
+    def get(self,request,pk):
+        team = get_object_or_404(Team, pk=pk)
+        total_points = team.members.chore.all().exclude(complete=False).aggregate(Sum('chore__points'))
         return Response(total_points)
 
 
@@ -338,17 +349,48 @@ class FeedDetailView(RetrieveUpdateDestroyAPIView):
 # class NotificationFireView(ListCreateAPIView):
 #     serializer_class = NotificationSerializer
 #     assignments = Assignment.objects.all()
-#     notifications = Notification.objects.all()   
+#     notifications = Notification.objects.all()
+#     feed = get_object_or_404(Feed, pk=10) 
+
 
 #     def perform_create(self, serializer):
 #         if assignments.complete == False:
 #             pass
 #         else:
-#             serializer.save()
+#             serializer.save(message="Complete we are so smart", feed=feed)
 
 #     def get(self,request):
 #         notifications = Notification.objects.all()
 #         serializer = NotificationSerializer(notifications, many=True)
 #         return Response(serializer.data)
     
+# def my_handler(sender, instance, created, **kwargs):
+#     user = User.objects.all()
+#     assignment = Assignment.complete.patch(name=Assignment)
+#     action.send(user, verb="completed", target=assignment)
 
+
+# def my_handler(sender, created, instance, **kwargs):
+        
+#         # instance = Assignment.objects.all(get_field('complete'))
+#         action.send(instance, verb='Marked as Complete testing')
+    
+# post_save.connect(my_handler, sender=Assignment)
+
+
+# def my_handler(sender, created, instance, **kwargs):
+#     action_object_stream(complete)
+
+# post_save.connect(my_handler, sender=Assignment)
+
+@receiver(pre_save, sender=Assignment)
+def do_something_if_changed(sender, instance, **kwargs):
+    try:
+        old_version = sender.objects.get(pk=instance.pk)
+    except sender.DoesNotExist:
+        pass # Object is new, so field hasn't technically changed, but you may want to do something else here.
+    else:
+        if not old_version.complete == instance.complete: # Field has changed
+            action.send(instance, verb='completed')  
+
+    
