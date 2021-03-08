@@ -388,9 +388,11 @@ def do_something_if_changed(sender, instance, **kwargs):
     try:
         old_version = sender.objects.get(pk=instance.pk)
     except sender.DoesNotExist:
+        
         pass # Object is new, so field hasn't technically changed, but you may want to do something else here.
-    else:
-        if not old_version.complete == instance.complete: # Field has changed
+        
+    else:       
+        if old_version.complete==False and not old_version.complete == instance.complete: # Field has changed
             action.send(instance, verb='completed') 
 
 @receiver(pre_save, sender=Assignment)
