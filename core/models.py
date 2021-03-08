@@ -57,7 +57,7 @@ class Assignment(models.Model):
     
 
     def __str__(self):
-        return f'{self.user} ?? {self.chore} ?? {self.assignment_type} ?? '
+        return f'{self.user} ?? {self.chore} ?? {self.assignment_type} ?? {self.chore.points} ?? '
 
 class Pod(models.Model):
     name = models.CharField(max_length=500, null=False)
